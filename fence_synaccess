@@ -44,7 +44,7 @@
 use strict;
 use warnings;
 
-# IO::Handle is used for logging and communicating with the APC switched PDU via the snmp command line tools.
+# IO::Handle is used for logging and communicating with the Synaccess switched PDU via the snmp command line tools.
 # Net::SNMP is not used to do availability issues with EL6.
 use IO::Handle;
 
@@ -179,7 +179,7 @@ if ($conf->{'system'}{version})
 	do_exit($conf, $log, 0);
 }
 
-# This checks to make sure I can reach the APC PDU. It will exit if not.
+# This checks to make sure I can reach the Synaccess PDU. It will exit if not.
 connect_to_pdu($conf, $log);
 
 #############################################################################################################
@@ -197,7 +197,7 @@ if (($conf->{snmp}{action} eq "monitor") or ($conf->{snmp}{action} eq "list"))
 }
 
 # If I made it this far, I am setting a state. Sort out what state from the values in my conf->{snmp} hash.
-record($conf, $log, __LINE__, "Setting node: [".$conf->{snmp}{node}."] to action: [".$conf->{snmp}{action}."] using the APC PDU: [".$conf->{snmp}{ipaddr}."] using the community: [".$conf->{snmp}{community}."]\n") if $conf->{'system'}{debug};
+record($conf, $log, __LINE__, "Setting node: [".$conf->{snmp}{node}."] to action: [".$conf->{snmp}{action}."] using the Synaccess PDU: [".$conf->{snmp}{ipaddr}."] using the community: [".$conf->{snmp}{community}."]\n") if $conf->{'system'}{debug};
 
 # Do it!
 my $exit_code = process_action($conf, $log);
@@ -255,7 +255,7 @@ sub read_snmp
 	return($value);
 }
 
-# This connects to a APC PDU to ensure it is available.
+# This connects to a Synaccess PDU to ensure it is available.
 sub connect_to_pdu
 {
 	my ($conf, $log) = @_;
@@ -413,7 +413,7 @@ sub help
 	my ($conf, $log) = @_;
 	
 	# Point the user at the man page.
-	print "See 'man fence_apc_alteeve' for instructions on using the APC PDU Fence Agent.\n";
+	print "See 'man fence_synaccess' for instructions on using the Synaccess PDU Fence Agent.\n";
 	
 	do_exit($conf, $log, 0);
 }
@@ -423,17 +423,16 @@ sub metadata
 {
 	my ($conf, $log) = @_;
 	
-	print q`
-<?xml version="1.0" ?>
+	print q`<?xml version="1.0" ?>
 <resource-agent name="fence_synaccess" shortdesc="Fence agent for Synaccess brand Switched PDUs.">
 <longdesc>
 fence_synaccess is a network-connected, multiport power fencing device.
 </longdesc>
 <parameters>
-	<parameter name="ipaddr" unique="1">
+	<parameter name="ipaddr" unique="1" required="1">
 		<getopt mixed="-a" />
 		<content type="string" />
-		<shortdesc lang="en">Resolvable host name or IP of the APC PDU.</shortdesc>
+		<shortdesc lang="en">Resolvable host name or IP of the Synaccess PDU.</shortdesc>
 	</parameter>
 	<parameter name="community" unique="1">
 		<getopt mixed="-c" />
@@ -483,7 +482,7 @@ fence_synaccess is a network-connected, multiport power fencing device.
 	<parameter name="version" unique="1">
 		<getopt mixed="--version" />
 		<content type="boolean" />
-		<shortdesc lang="en">Prints the APC PDU fence agent version and exits.</shortdesc>
+		<shortdesc lang="en">Prints the Synaccess PDU fence agent version and exits.</shortdesc>
 	</parameter>
 </parameters>
 <actions>
@@ -703,7 +702,7 @@ sub read_cla
 			if ($arg eq "a")
 			{
 				# This is the IP address or hostname of the
-				# APC PDU to call.
+				# Synaccess PDU to call.
 				$set_next = "ipaddr";
 				record($conf, $log, __LINE__, "Next argument will be stored in: [$set_next]\n") if $conf->{'system'}{debug};
 			}
@@ -829,7 +828,7 @@ sub read_stdin
 		}
 		elsif ($name eq "ipaddr") 
 		{
-			# Record the IP Address or name of the APC PDU to use.
+			# Record the IP Address or name of the Synaccess PDU to use.
 			$conf->{snmp}{ipaddr} = $value;
 		} 
 		elsif ($name eq "community") 
@@ -973,7 +972,7 @@ sub version
 	record($conf, $log, __LINE__, "Fence Agent version: [".$conf->{'system'}{agent_version}."]\n", 1);
 	
 	# ToDo: Query the PDU for details.
-	record($conf, $log, __LINE__, "APC PDU details not currently recorded.\n", 1);
+	record($conf, $log, __LINE__, "Synaccess PDU details not currently recorded.\n", 1);
 	
 	do_exit($conf, $log, 0);
 }
@@ -997,6 +996,6 @@ sub _catch_sig
 {
 	my $signame = shift;
 	
-	record($conf, $log, __LINE__, "fence_apc_alteeve process with PID $$ Exiting on SIG${signame}.\n", 1);
+	record($conf, $log, __LINE__, "fence_synaccess process with PID $$ Exiting on SIG${signame}.\n", 1);
 	do_exit($conf, $log, 1);
 }
