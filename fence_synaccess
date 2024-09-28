@@ -429,15 +429,25 @@ sub metadata
 fence_synaccess is a network-connected, multiport power fencing device.
 </longdesc>
 <parameters>
-	<parameter name="ipaddr" unique="1" required="1">
-		<getopt mixed="-a" />
-		<content type="string" />
-		<shortdesc lang="en">Resolvable host name or IP of the Synaccess PDU.</shortdesc>
+	<parameter name="action" unique="0" required="1">
+		<getopt mixed="-o, --action=[action]" />
+		<content type="string" default="reboot"  />
+		<shortdesc lang="en">Fencing action</shortdesc>
 	</parameter>
 	<parameter name="community" unique="1">
 		<getopt mixed="-c" />
 		<content type="string" />
 		<shortdesc lang="en">Set the community name. Default 'private'.</shortdesc>
+	</parameter>
+	<parameter name="ip" unique="0" required="1" obsoletes="ipaddr">
+		<getopt mixed="-a, --ip=[ip]" />
+		<content type="string" />
+		<shortdesc lang="en">Resolvable host name or IP of the Synaccess PDU.</shortdesc>
+	</parameter>
+	<parameter name="ipaddr" unique="0" required="1" deprecated="1">
+		<getopt mixed="-a, --ip=[ip]" />
+		<content type="string"  />
+		<shortdesc lang="en">IP address or hostname of fencing device</shortdesc>
 	</parameter>
 	<parameter name="password" unique="1">
 		<getopt mixed="-p" />
@@ -449,10 +459,15 @@ fence_synaccess is a network-connected, multiport power fencing device.
 		<content type="string" />
 		<shortdesc lang="en">Script to retrieve password. *Not implemented*</shortdesc>
 	</parameter>
-	<parameter name="port" unique="1">
-		<getopt mixed="-n" />
-		<content type="integer" />
-		<shortdesc lang="en">The port (outlet number) to act on.</shortdesc>
+	<parameter name="plug" unique="0" required="1" obsoletes="port">
+		<getopt mixed="-n, --plug=[id]" />
+		<content type="string"  />
+		<shortdesc lang="en">Physical plug (outlet) number on device</shortdesc>
+	</parameter>
+	<parameter name="port" unique="0" required="1" deprecated="1">
+		<getopt mixed="-n, --plug=[id]" />
+		<content type="string"  />
+		<shortdesc lang="en">Physical plug (outlet) number on devicee</shortdesc>
 	</parameter>
 	<parameter name="login" unique="1">
 		<getopt mixed="-l" />
